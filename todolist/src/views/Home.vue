@@ -10,21 +10,37 @@
         @keyup.enter="addNew"
       >
     </div>
-    <ul class="list_container">
-      <li v-for="(item,index) in list"
-       v-bind:key="index"
-      >
-        <input type="checkbox"
-         :id="item"
-         :value="item" 
-         v-model="checkLists"
-        >
-        <label :for="item">{{item}}</label>
-      </li>
-    </ul>
     <div>
-      <button value="willDo">未办</button>
-      <button value="haveDo">已办</button>
+      <h3>未办事项</h3>
+      <ul class="list_container">
+        <li v-for="(item,index) in list"
+         v-bind:key="item+index"
+        >
+          <input type="checkbox"
+           :id="item"
+           :value="item" 
+           v-model="checkLists"
+           @change="changeDone(index)"
+          >
+          <label :for="item">{{item}}</label>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h3>已办事项</h3>
+      <ul class="list_container">
+        <li v-for="(item,index) in checkLists"
+         v-bind:key="index+item"
+        >
+          <input type="checkbox"
+           :id="item"
+           :value="item" 
+           v-model="checkLists"
+           @change="changeDonot(item)"
+          >
+          <label :for="item">{{item}}</label>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -44,6 +60,12 @@ export default {
     addNew(){
       this.list.push(this.message)
       this.message=""
+    },
+    changeDone(index){
+      this.list.splice(index,1)
+    },
+    changeDonot(item){
+      this.list.push(item)
     }
   }
 
