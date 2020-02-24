@@ -51,7 +51,7 @@ export default {
   name: 'Home',
   data(){
     return{
-      list:["change world","find work","go to trip"],
+      list:["change world","find work","go to trip","add new things"],
       message:'',
       checkLists:[]
     }
