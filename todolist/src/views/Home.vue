@@ -10,85 +10,86 @@
         @keyup.enter="addNew"
       >
     </div>
-    <div>
-      <h3>未办事项</h3>
-      <ul class="list_container">
-        <li v-for="(item,index) in list"
-         v-bind:key="item+index"
-        >
-          <input type="checkbox"
-           :id="item"
-           :value="item" 
-           v-model="checkLists"
-           @change="changeDone(index)"
-          >
-          <label :for="item">{{item}}</label>
-        </li>
-      </ul>
-    </div>
-    <div>
-      <h3>已办事项</h3>
-      <ul class="list_container">
-        <li v-for="(item,index) in checkLists"
-         v-bind:key="index+item"
-        >
-          <input type="checkbox"
-           :id="item"
-           :value="item" 
-           v-model="checkLists"
-           @change="changeDonot(item)"
-          >
-          <label :for="item">{{item}}</label>
-        </li>
-      </ul>
-    </div>
+    <All v-if="type==='all'"
+     :param="list"
+     types="all"
+     @change-done="changeDone"
+    />
+    <All v-if="type==='alive'"
+     :param="aliveList" 
+     types="alive"
+    />
+    <All v-if="type==='complete'" 
+     :param="completeList" 
+     types="complete"
+    />
+    <button @click="linkToAll('all')">All</button>
+    <button @click="linkToAll('alive')">Alive</button>
+    <button @click="linkToAll('complete')">Complete</button>
   </div>
 </template>
 
 <script>
-
+import All from "@/components/All/All.vue"
 export default {
   name: 'Home',
-  data(){
-    return{
-      list:["change world","find work","go to trip","add new things"],
+  components: {
+    'All':All
+  },
+  data() {
+    return {
+      list:[
+        {
+          content:"change world",
+          isDone:false
+        },{
+          content:"find work",
+          isDone:false
+        },{
+          content:"go to trip",
+          isDone:true
+        },{
+          content:"add new things",
+          isDone:false
+        }
+      ],
       message:'',
-      checkLists:[]
+      type: 'all'
     }
+  },
+  computed:{
+    aliveList(){
+      return this.list.filter(item=>
+        !item.isDone
+      )
+    },
+    completeList(){
+      return this.list.filter(item=>
+        item.isDone
+      )
+    },
   },
   methods:{
     addNew(){
-      this.list.push(this.message)
+      this.list.push({content:this.message,isDone:false})
       this.message=""
     },
-    changeDone(index){
-      this.list.splice(index,1)
+    linkToAll(type){
+      this.type=type
+      this.params
     },
-    changeDonot(item){
-      this.list.push(item)
+    changeDone(e){
+      const i = e.index
+      if(e.item.isDone){
+        this.list[i].isDone = true
+      } else {
+        this.list[i].isDone = false
+      }
+      console.log(e)
     }
   }
-
 }
 </script>
 
-<style scoped lang="less">
-.home {
-  .title {
-    padding: 10px;
-    font-weight: 600;
-  }
-  .list_container {
-    width: 200px;
-    height: 100px;
-    margin: auto;
-    padding: 0;
-    li {
-      list-style: none;
-      text-align: left;
-      padding-top: 10px;
-    }
-}
-
-}
+<style scoped>
 </style>
