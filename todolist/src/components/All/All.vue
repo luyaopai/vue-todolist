@@ -1,15 +1,19 @@
 <template>
   <div class="all_container">
     <ul class="all">
-      <li v-for="(item,index) in param"
-      :key="index">
-      <input type="checkbox"
-      name="item"
-      id="item"
-      v-model="item.isDone"
-      @change="changeDone(item,index)"
+      <li
+        v-for="(item,index) in param"
+        :key="index"
       >
-      <label for="item">{{item.content}}</label>
+        <input
+          id="item"
+          v-model="item.isDone"
+          type="checkbox"
+          name="item"
+        >
+        <label for="item">
+          {{ item.content }}
+        </label>
       </li>
     </ul>
   </div>
@@ -19,21 +23,26 @@
 
 export default {
   name: 'All',
-  props:{
-    param:{
-      type:Array,
-      default:function(){
-        return []
-      }
+  props: {
+    param: {
+      type: Array,
+      default() {
+        return [];
+      },
     },
-    types:""
+    types: {
+      type: String,
+      default() {
+        return 'all';
+      },
+    },
   },
-  methods:{
-    changeDone(item,index){
-      this.$emit('change-done',{'item':item,'index':index})
-    }
-  }
-}
+  methods: {
+    // changeDone(item, index) {
+    //   this.$emit('change-done', { item, index });
+    // },
+  },
+};
 </script>
 
 <style scoped lang="less">
