@@ -1,36 +1,55 @@
 <template>
   <div class="home">
     <div class="title">
-      TO DO LIST
+      TODO LIST
     </div>
     <div class="listContainer">
-      <div class="inputNew">
-        <input
-          v-model="message"
-          type="text"
-          placeholder="add new list"
-          @keyup.enter="addNew"
-        >
-      </div>
+      <!-- <i
+        class="checkAll"
+        @click="checkAll"
+      /> -->
+      <input
+        v-model="message"
+        type="text"
+        class="inputNew"
+        placeholder="add new list"
+        autofocus="autofocus"
+        @keyup.enter="addNew"
+      >
       <All
         :param="paramList"
         :types="type"
+        @change-done="changeDone"
+        @delete-item="deleteItem"
       />
-      <button @click="linkToAll('all')">
-        All
-      </button>
-      <button @click="linkToAll('alive')">
-        Alive
-      </button>
-      <button @click="linkToAll('complete')">
-        Complete
-      </button>
+      <div class="btn-class">
+        <span class="num-left">
+          {{ num }} item left
+        </span>
+        <button @click="linkToAll('all')">
+          All
+        </button>
+        <button @click="linkToAll('alive')">
+          Alive
+        </button>
+        <button @click="linkToAll('complete')">
+          Complete
+        </button>
+        <button
+          v-if="numChecked"
+          class="delbtn"
+          @click="deleteAll"
+        >
+          clear complete
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import All from '@/components/All/All.vue';
+import './home.less';
 
 export default {
   name: 'Home',
@@ -50,7 +69,7 @@ export default {
           content: 'go to trip',
           isDone: true,
         }, {
-          content: 'add new things',
+          content: 'delete',
           isDone: false,
         },
       ],
@@ -62,8 +81,14 @@ export default {
     aliveList() {
       return this.list.filter((item) => !item.isDone);
     },
+    num() {
+      return this.aliveList.length;
+    },
     completeList() {
       return this.list.filter((item) => item.isDone);
+    },
+    numChecked() {
+      return this.completeList.length;
     },
     paramList() {
       switch (this.type) {
@@ -84,17 +109,24 @@ export default {
       this.message = '';
     },
     linkToAll(type) {
-      this.type = type;
+      this.$nextTick(() => {
+        this.type = type;
+      });
     },
-    // changeDone(e) {
-    //   const i = e.index;
-    //   if (e.item.isDone) {
-    //     this.list[i].isDone = true;
-    //   } else {
-    //     this.list[i].isDone = false;
-    //   }
-    //   console.log(e);
-    // },
+    changeDone(e) {
+      const { content } = e;
+      const isChecked = e.checked;
+      this.list.forEach((val) => {
+        (val.content === content ? val.isDone = isChecked : val.isDone);
+      });
+    },
+    deleteItem(e) {
+      const content = e;
+      this.list = this.list.filter((val) => val.content !== content);
+    },
+    deleteAll() {
+      this.list = this.list.filter((val) => !val.isDone);
+    }
   },
 };
 </script>

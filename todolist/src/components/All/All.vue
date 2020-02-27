@@ -2,27 +2,29 @@
   <div class="all_container">
     <ul class="all">
       <li
-        v-for="(item,index) in param"
-        :key="index"
+        v-for="(item) in param"
+        :key="item.content"
       >
-        <input
-          id="item"
-          v-model="item.isDone"
-          type="checkbox"
-          name="item"
-        >
-        <label for="item">
-          {{ item.content }}
-        </label>
+        <CheckBox
+          :content="item.content"
+          :prop-checked="item.isDone"
+          @change-checked="changeDone"
+          @delete-item="deleteItem"
+        />
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import CheckBox from '@/components/CheckBox/CheckBox.vue';
+import './all.less';
 
 export default {
   name: 'All',
+  components: {
+    CheckBox,
+  },
   props: {
     param: {
       type: Array,
@@ -38,15 +40,12 @@ export default {
     },
   },
   methods: {
-    // changeDone(item, index) {
-    //   this.$emit('change-done', { item, index });
-    // },
+    changeDone(e) {
+      this.$emit('change-done', { content: e.content, checked: e.checked });
+    },
+    deleteItem(e) {
+      this.$emit('delete-item', e);
+    },
   },
 };
 </script>
-
-<style scoped lang="less">
-.all{
-  list-style: none;
-}
-</style>
