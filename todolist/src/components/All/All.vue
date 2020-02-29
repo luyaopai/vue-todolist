@@ -3,11 +3,10 @@
     <ul class="all">
       <li
         v-for="(item) in param"
-        :key="item.content"
+        :key="item.id"
       >
         <CheckBox
-          :content="item.content"
-          :prop-checked="item.isDone"
+          :item="item"
           @change-checked="changeDone"
           @delete-item="deleteItem"
         />
@@ -41,7 +40,7 @@ export default {
   },
   methods: {
     changeDone(e) {
-      this.$emit('change-done', { content: e.content, checked: e.checked });
+      this.$emit('change-done', { id: e.id, checked: e.checked });
     },
     deleteItem(e) {
       this.$emit('delete-item', e);

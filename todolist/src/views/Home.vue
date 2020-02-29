@@ -4,16 +4,15 @@
       TODO LIST
     </div>
     <div class="listContainer">
-      <!-- <i
-        class="checkAll"
+      <i
         @click="checkAll"
-      /> -->
+      />
       <input
+        ref="addNew"
         v-model="message"
         type="text"
         class="inputNew"
         placeholder="add new list"
-        autofocus="autofocus"
         @keyup.enter="addNew"
       >
       <All
@@ -62,14 +61,20 @@ export default {
         {
           content: 'change world',
           isDone: false,
+          id: 0,
         }, {
           content: 'find work',
           isDone: false,
+          id: 1,
+
         }, {
           content: 'go to trip',
           isDone: true,
+          id: 3,
+
         }, {
           content: 'delete',
+          id: 4,
           isDone: false,
         },
       ],
@@ -102,10 +107,24 @@ export default {
           return this.list;
       }
     },
+    // isCheckAll() {
+    //   const LIST_LEN = this.list.length;
+    //   const COMP_LEN = this.completeList.length;
+    //   return LIST_LEN === COMP_LEN;
+    // },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.addNew.focus();
+    });
   },
   methods: {
     addNew() {
-      this.list.push({ content: this.message, isDone: false });
+      this.list.push({
+        content: this.message,
+        isDone: false,
+        id: new Date().getTime(),
+      });
       this.message = '';
     },
     linkToAll(type) {
@@ -114,10 +133,10 @@ export default {
       });
     },
     changeDone(e) {
-      const { content } = e;
+      const { id } = e;
       const isChecked = e.checked;
       this.list.forEach((val) => {
-        (val.content === content ? val.isDone = isChecked : val.isDone);
+        (val.id === id ? val.isDone = isChecked : val.isDone);
       });
     },
     deleteItem(e) {
@@ -126,7 +145,12 @@ export default {
     },
     deleteAll() {
       this.list = this.list.filter((val) => !val.isDone);
-    }
+    },
+    checkAll() {
+      this.list.forEach((val) => {
+        this.$set(val, 'isDone', true);
+      });
+    },
   },
 };
 </script>
