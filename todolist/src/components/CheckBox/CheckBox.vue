@@ -3,7 +3,6 @@
     class="check-container"
     @mouseover="showDelete"
     @mouseleave="hideDelete"
-    @dblclick="changeInput"
   >
     <div
       v-if="!isEdit"
@@ -15,6 +14,7 @@
       v-if="!isEdit"
       class="item-content"
       :class="{checked:item.isDone}"
+      @dblclick="changeInput"
     >
       {{ item.content }}
     </div>
@@ -73,7 +73,10 @@ export default {
   },
   methods: {
     onInputChange(e) {
-      console.log(e);
+      this.$emit('change-content', {
+        id: this.item.id,
+        value: e.target.value,
+      });
     },
     showDelete() {
       this.deleteshow = true;
@@ -94,7 +97,7 @@ export default {
       this.$emit('change-checked', { id: this.item.id, checked: !this.item.isDone });
     },
     deleteItem() {
-      this.$emit('delete-item', this.content);
+      this.$emit('delete-item', this.item.id);
     },
   },
 };

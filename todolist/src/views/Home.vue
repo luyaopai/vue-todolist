@@ -5,7 +5,10 @@
     </div>
     <div class="listContainer">
       <i
-        @click="checkAll"
+        :class="{
+          checkAll: isCheckAll
+        }"
+        @click="handleCheckAll"
       />
       <input
         ref="addNew"
@@ -20,6 +23,7 @@
         :types="type"
         @change-done="changeDone"
         @delete-item="deleteItem"
+        @change-content="onInputChange"
       />
       <div class="btn-class">
         <span class="num-left">
@@ -80,6 +84,7 @@ export default {
       ],
       message: '',
       type: 'all',
+      isCheckAll: false,
     };
   },
   computed: {
@@ -107,11 +112,16 @@ export default {
           return this.list;
       }
     },
-    // isCheckAll() {
-    //   const LIST_LEN = this.list.length;
-    //   const COMP_LEN = this.completeList.length;
-    //   return LIST_LEN === COMP_LEN;
-    // },
+
+  },
+  watch: {
+    list: {
+      deep: true,
+      handler(list) {
+        this.isCheckAll = list.filter((i) => i.isDone).length === list.length;
+      },
+    },
+
   },
   mounted() {
     this.$nextTick(() => {
@@ -119,6 +129,14 @@ export default {
     });
   },
   methods: {
+    onInputChange(param) {
+      const { id, value } = param;
+      this.list.forEach((item) => {
+        item.id === id && (
+          item.content = value
+        );
+      });
+    },
     addNew() {
       this.list.push({
         content: this.message,
@@ -139,16 +157,16 @@ export default {
         (val.id === id ? val.isDone = isChecked : val.isDone);
       });
     },
-    deleteItem(e) {
-      const content = e;
-      this.list = this.list.filter((val) => val.content !== content);
+    deleteItem(id) {
+      this.list = this.list.filter((val) => val.id !== id);
     },
     deleteAll() {
       this.list = this.list.filter((val) => !val.isDone);
     },
-    checkAll() {
+    handleCheckAll() {
+      this.isCheckAll = !this.isCheckAll;
       this.list.forEach((val) => {
-        this.$set(val, 'isDone', true);
+        this.$set(val, 'isDone', this.isCheckAll);
       });
     },
   },
