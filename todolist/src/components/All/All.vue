@@ -7,9 +7,6 @@
       >
         <CheckBox
           :item="item"
-          @change-checked="changeDone"
-          @delete-item="deleteItem"
-          @change-content="onInputChange"
         />
       </li>
     </ul>
@@ -32,23 +29,8 @@ export default {
         return [];
       },
     },
-    types: {
-      type: String,
-      default() {
-        return 'all';
-      },
-    },
   },
   methods: {
-    onInputChange(param) {
-      this.$emit('change-content', param);
-    },
-    changeDone(e) {
-      this.$emit('change-done', { id: e.id, checked: e.checked });
-    },
-    deleteItem(e) {
-      this.$emit('delete-item', e);
-    },
   },
 };
 </script>

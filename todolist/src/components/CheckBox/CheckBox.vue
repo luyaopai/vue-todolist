@@ -8,7 +8,7 @@
       v-if="!isEdit"
       class="item-dot"
       :class="{checked:item.isDone}"
-      @click="changeChecked"
+      @click="isChecked(item.id)"
     />
     <div
       v-if="!isEdit"
@@ -22,7 +22,7 @@
       v-if="!isEdit"
       class="item-delete"
       :class="{delete:deleteshow}"
-      @click="deleteItem"
+      @click="deleteItem(item.id)"
     >
       x
     </div>
@@ -32,13 +32,15 @@
       :value="item.content"
       type="text"
       class="item-content item-input"
-      @change="onInputChange"
+      @change="changeItem"
+      @keyup.enter="hideInput"
       @blur="hideInput"
     >
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import './checkbox.less';
 
 export default {
@@ -51,33 +53,14 @@ export default {
         return {};
       },
     },
-    content: {
-      type: String,
-      default() {
-        return '';
-      },
-    },
-    propChecked: {
-      type: Boolean,
-      default() {
-        return false;
-      },
-    },
   },
   data() {
     return {
       isEdit: false,
       deleteshow: false,
-      isChecked: this.propChecked,
     };
   },
   methods: {
-    onInputChange(e) {
-      this.$emit('change-content', {
-        id: this.item.id,
-        value: e.target.value,
-      });
-    },
     showDelete() {
       this.deleteshow = true;
     },
@@ -93,11 +76,12 @@ export default {
     hideInput() {
       this.isEdit = false;
     },
-    changeChecked() {
-      this.$emit('change-checked', { id: this.item.id, checked: !this.item.isDone });
-    },
-    deleteItem() {
-      this.$emit('delete-item', this.item.id);
+    ...mapMutations([
+      'isChecked',
+      'deleteItem',
+    ]),
+    changeItem(e) {
+      this.$store.commit('changeItem', { id: this.item.id, val: e.target.value });
     },
   },
 };
