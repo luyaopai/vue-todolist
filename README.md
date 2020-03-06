@@ -20,4 +20,4 @@ npm run serve
 
 ### 运行界面
 
-### ![](D:\Desktop\Snipaste_2020-03-06_15-26-57.jpg)
+![<https://raw.githubusercontent.com/luyaopai/vue-todolist/master/public/screen.jpg> ]( )
