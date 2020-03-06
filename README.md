@@ -1,6 +1,6 @@
 ## Vue TodoList
 
-预览地址: 
+预览地址: [Demo_link]https://github.com/luyaopai/vue-todolist/dist/index.html
 
 ### 运行项目
 
