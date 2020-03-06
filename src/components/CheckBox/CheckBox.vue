@@ -63,6 +63,8 @@ export default {
   methods: {
     showDelete() {
       this.deleteshow = true;
+
+      this.$store.state.xx = 123;
     },
     hideDelete() {
       this.deleteshow = false;
