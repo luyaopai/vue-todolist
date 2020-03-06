@@ -20,4 +20,4 @@ npm run serve
 
 ### 运行界面
 
-![<https://raw.githubusercontent.com/luyaopai/vue-todolist/master/public/screen.jpg> ]( )
+![img](https://raw.githubusercontent.com/luyaopai/vue-todolist/master/public/screen.jpg)
