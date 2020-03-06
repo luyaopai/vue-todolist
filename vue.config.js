@@ -4,5 +4,5 @@ module.exports = {
   },
   publicPath: process.env.NODE_ENV === 'development'
     ? '/'
-    : '/vue-todolist/',
+    : '/vue-todolist/dist/',
 };
